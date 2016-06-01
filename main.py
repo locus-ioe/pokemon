@@ -67,7 +67,7 @@ opponent = [opponent, pokemons[opponent], 100]
 
 
 def attack(attacker, other, attack_id):
-    attack = attacker[1][attack_id]
+    attack = attacker[1][attack_id-1]
     print(attacker[0] + " uses " + attack[0] + ".")
     hit = random.gauss(attack[1], 10)
     other[2] = max(0, other[2] - hit)
