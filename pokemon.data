@@ -1,0 +1,24 @@
+pikachu
+    thundershock: 50
+    thunder: 30
+    growl: 20
+    thunderbolt: 35
+end
+bulbasaur
+    razor-leaf: 40
+    vine-weep: 33
+    tackle: 37
+    cut: 22
+end
+squirtle
+    cut: 20
+    water-gun: 28
+    skull-bash: 50
+    bubble-beam: 30
+end
+scyther
+    quick-attack: 10
+    slash: 48
+    body-slam: 23
+    swift: 18
+end
