@@ -80,7 +80,7 @@ while(True):
         break
 
 # Find a random pokemon opponent.
-opponent = pokemon_names[random.randint(1, len(pokemons)-1)]
+opponent = random.choice(pokemon_names)
 
 print("You chose " + choice)
 print("Your attacks: ")
