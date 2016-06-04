@@ -1,17 +1,53 @@
+"""A Pokemon Game built for Python Workshop, Locus 2016.
+
+The game is simple and text-based. Pokemons data are read
+from file. User get to choose a pokemon while the computer
+chooses one at random. Then the battle starts with the user
+and the computer alternatively choosing attacks for their
+respective pokemons. The game ends when one of the pokemon
+loses all health.
+"""
+
 import random
 import difflib
 
 
-print('pokemon loading...')
+def use_attack(attacker, other, attack_id):
+    """Attacker uses attack with given id on other.
+    We need to get a random hit point based around the strength of
+    the attack, and use it to decrease health
+    of the other.
+    """
+
+    attack = attacker[1][attack_id-1]
+    print(attacker[0] + " uses " + attack[0] + ".")
+
+    # Gaussian randomness with attack's strength as mean.
+    hit = random.gauss(attack[1], 10)
+
+    # Decrease the health by "hit", but don't let it be less than 0.
+    other[2] = max(0, other[2] - hit)
+
+    print("It did " + str(hit) + " points damaage on " + other[0] + ".")
+    print(other[0] + " has now health points " + str(other[2]) + ".\n")
+
+
+""" START
+"""
+
+print('Loading pokemons ...')
 
 # Read pokemon data from file and split by the separator 'end'.
+
 pokemon_data = open('pokemon.data', 'r').read()
 raw_data = pokemon_data.strip().split('end')[:-1]
 
 # Store all pokemon data as dictionary in format:
 # { name: [(attack1, strength), (attack2, strength), ...], ...}
+
 pokemons = {}
 pokemon_names = []
+
 for each in raw_data:
     # Split each pokemon data by whitespace.
     # This gives [name, attack1, strength1, attack2, strength2, ...]
@@ -66,30 +102,33 @@ user = [choice, pokemons[choice], 100]
 opponent = [opponent, pokemons[opponent], 100]
 
 
-def attack(attacker, other, attack_id):
-    attack = attacker[1][attack_id-1]
-    print(attacker[0] + " uses " + attack[0] + ".")
-    hit = random.gauss(attack[1], 10)
-    other[2] = max(0, other[2] - hit)
-    print("It did " + str(hit) + " points damaage on " + other[0] + ".")
-    print(other[0] + " has now health points " + str(other[2]) + ".\n")
-
-
 print("\nBattle !\n")
 
-while (True):
-    # Let the user decide the first attack.
-    attack_choice = int(input("Choose an attack (1-4): "))
-    # TODO: Validate attack input.
-    attack(user, opponent, attack_choice)
+# The Battle is a loop that ends only with victory or loss.
+while True:
 
+    # Let the user decide the first attack.
+    while True:
+        attack_choice = int(input("Choose an attack (1-4): "))
+        if attack_choice < 1 or attack_choice > 4:
+            print("Invalid choice")
+        else:
+            break
+
+    # Use the choice for attacking the opponent.
+    use_attack(user, opponent, attack_choice)
+
+    # Check for victory.
     if opponent[2] == 0:
         print("You won !")
         break
 
+    # Get a random attack choice for opponent and use it on user.
     attack_choice = random.randint(1, 4)
-    attack(opponent, user, attack_choice)
+    use_attack(opponent, user, attack_choice)
 
+    # Check for loss.
     if user[2] == 0:
         print("You lost !")
         break
+
