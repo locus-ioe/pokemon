@@ -109,7 +109,12 @@ while True:
 
     # Let the user decide the first attack.
     while True:
-        attack_choice = int(input("Choose an attack (1-4): "))
+        attack_choice = input("Choose an attack (1-4): ")
+        try:
+            attack_choice = int(attack_choice)
+        except:
+            print("Please enter integer value")
+            continue
         if attack_choice < 1 or attack_choice > 4:
             print("Invalid choice")
         else:
