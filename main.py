@@ -20,7 +20,7 @@ def use_attack(attacker, other, attack_id):
     """
 
     attack = attacker[1][attack_id-1]
-    print(attacker[0] + " uses " + attack[0] + ".")
+    print("{} uses {}.".format(attacker[0],attack[0]))
 
     # Gaussian randomness with attack's strength as mean.
     hit = random.gauss(attack[1], 10)
@@ -28,8 +28,8 @@ def use_attack(attacker, other, attack_id):
     # Decrease the health by "hit", but don't let it be less than 0.
     other[2] = max(0, other[2] - hit)
 
-    print("It did " + str(hit) + " points damaage on " + other[0] + ".")
-    print(other[0] + " has now health points " + str(other[2]) + ".\n")
+    print("It did {:.2f} points damage on {}.".format(hit,other[0]))
+    print("{} has now health points {:.2f}\n".format(other[0],other[2]))
 
 
 """ START
@@ -65,7 +65,7 @@ for each in raw_data:
 
 # Show pokemon list.
 for i, name in enumerate(pokemon_names):
-    print(str(i+1) + ". " + name)
+    print("{}. {}".format(i+1,name))
 
 # Get pokemon choice from user.
 while(True):
@@ -82,18 +82,18 @@ while(True):
 # Find a random pokemon opponent.
 opponent = random.choice(pokemon_names)
 
-print("You chose " + choice)
+print("You chose {}".format(choice))
 print("Your attacks: ")
 i = 1
 for attack in pokemons[choice]:
-    print(str(i) + ". " + attack[0])
+    print("{}. {}".format(i,attack[0]))
     i += 1
 
-print("Opponent chose " + opponent)
+print("Opponent chose {}".format(opponent))
 print("Opponent's attacks: ")
 i = 1
 for attack in pokemons[opponent]:
-    print(str(i) + ". " + attack[0])
+    print("{}. {}".format(i,attack[0]))
     i += 1
 
 # Create the user and opponent data structures:
@@ -110,6 +110,7 @@ while True:
     # Let the user decide the first attack.
     while True:
         attack_choice = input("Choose an attack (1-4): ")
+        # check if the user has entered non integer value
         try:
             attack_choice = int(attack_choice)
         except:
