@@ -10,6 +10,7 @@ loses all health.
 
 import random
 import difflib
+import os
 
 
 def use_attack(attacker, other, attack_id):
@@ -19,8 +20,8 @@ def use_attack(attacker, other, attack_id):
     of the other.
     """
 
-    attack = attacker[1][attack_id-1]
-    print(attacker[0] + " uses " + attack[0] + ".")
+    attack = attacker[1][attack_id - 1]
+    print("{} uses {}.".format(attacker[0], attack[0]))
 
     # Gaussian randomness with attack's strength as mean.
     hit = random.gauss(attack[1], 10)
@@ -28,13 +29,27 @@ def use_attack(attacker, other, attack_id):
     # Decrease the health by "hit", but don't let it be less than 0.
     other[2] = max(0, other[2] - hit)
 
-    print("It did " + str(hit) + " points damaage on " + other[0] + ".")
-    print(other[0] + " has now health points " + str(other[2]) + ".\n")
+    print("It did {:.2f} points damage on {}.".format(hit, other[0]))
+    print("{} has now health points {:.2f}\n".format(other[0], other[2]))
 
+
+def clear():
+    os.system("cls||clear")
+
+
+def list_attack(pokemons_list, attacker, opponent):
+    i = 1
+    # listing the attacks in tabular form 
+    print('{} \t{}'.format("Your's {}\'s attack".format(attacker),
+                           "Opponent's {}\'s attack".format(opponent), end=' '))
+    for attack, opp in zip(pokemons[attacker], pokemons[opponent]):
+        print("{}. {}\t\t\t{}. {}".format(i, attack[0], i, opp[0]))
+        i += 1
 
 """ START
 """
-
+# clear the screen before the start of the game
+clear()
 print('Loading pokemons ...')
 
 # Read pokemon data from file and split by the separator 'end'.
@@ -58,14 +73,14 @@ for each in raw_data:
     # Get each attack and its strength.
     attacks = []
     for i in range(1, len(temp), 2):
-        attack = (temp[i][:-1], int(temp[i+1]))
+        attack = (temp[i][:-1], int(temp[i + 1]))
         attacks.append(attack)
     pokemons[name] = attacks
     pokemon_names.append(name)
 
 # Show pokemon list.
 for i, name in enumerate(pokemon_names):
-    print(str(i+1) + ". " + name)
+    print("{}. {}".format(i + 1, name))
 
 # Get pokemon choice from user.
 while(True):
@@ -79,46 +94,46 @@ while(True):
         choice = possible_choices[0]
         break
 
+# clear the screen for displaying the user's and opponent's pokemon's attacks
+clear()
+
 # Find a random pokemon opponent.
-opponent = random.choice(pokemon_names)
+opponent_pokemon = random.choice(pokemon_names)
 
-print("You chose " + choice)
-print("Your attacks: ")
-i = 1
-for attack in pokemons[choice]:
-    print(str(i) + ". " + attack[0])
-    i += 1
+print("You chose {}".format(choice))
+print("Opponent chose {}".format(opponent_pokemon))
 
-print("Opponent chose " + opponent)
-print("Opponent's attacks: ")
-i = 1
-for attack in pokemons[opponent]:
-    print(str(i) + ". " + attack[0])
-    i += 1
 
 # Create the user and opponent data structures:
 # [name, attacks, health].
 user = [choice, pokemons[choice], 100]
-opponent = [opponent, pokemons[opponent], 100]
+opponent = [opponent_pokemon, pokemons[opponent_pokemon], 100]
 
 
-print("\nBattle !\n")
-
+print("\nBattle !")
+print("{} VS {}\n".format(choice, opponent_pokemon))
 # The Battle is a loop that ends only with victory or loss.
 while True:
 
     # Let the user decide the first attack.
     while True:
+        list_attack(pokemons, choice, opponent_pokemon)
         attack_choice = input("Choose an attack (1-4): ")
+        # check if the user has entered non integer value
         try:
             attack_choice = int(attack_choice)
         except:
+            clear()
             print("Please enter integer value")
             continue
         if attack_choice < 1 or attack_choice > 4:
+            clear()
             print("Invalid choice")
         else:
             break
+
+    # clear the screen to prompt user new attack choice
+    clear()
 
     # Use the choice for attacking the opponent.
     use_attack(user, opponent, attack_choice)
@@ -136,4 +151,3 @@ while True:
     if user[2] == 0:
         print("You lost !")
         break
-
